@@ -25,16 +25,18 @@ struct Article: Decodable {
     let title: String
     let description: String
     let date: String
-    let imageSrc: ImageSrc
+    let link: String
+    let imageSrcs: ImageSrcs
     enum CodingKeys: String, CodingKey {
         case title
         case description
         case date
-        case imageSrc = "image_src"
+        case link
+        case imageSrcs = "image_srcs"
     }
 }
 
-struct ImageSrc: Decodable {
-    let large: String
-    let large2x: String
+struct ImageSrcs: Decodable {
+    let large: String?
+    let large2x: String?
 }

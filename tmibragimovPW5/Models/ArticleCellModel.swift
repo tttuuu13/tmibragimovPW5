@@ -12,5 +12,5 @@ struct ArticleCellModel {
     let title: String
     let description: String
     let link: URL
-    let image: UIImage
+    let imageLink: URL?
 }
