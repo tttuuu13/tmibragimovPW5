@@ -10,10 +10,13 @@ import UIKit
 
 
 final class ArticleManager {
+    // MARK: - Properties
     private let decoder = JSONDecoder()
+    private var currentPage = 0;
+    
     // MARK: - Fetch news
-    public func fetchNews(page: Int, completion: @escaping (Result<[ArticleCellModel], Error>) -> Void) {
-        guard let url = URL(string: "\(Constants.API.URL)?page=\(page)") else { return }
+    public func fetchNews(completion: @escaping (Result<[ArticleCellModel], Error>) -> Void) {
+        guard let url = URL(string: "\(Constants.API.URL)?page=\(currentPage + 1)") else { return }
         URLSession.shared.dataTask(with: url) { data, _, error in
             if let error = error {
                 completion(.failure(error))
@@ -29,12 +32,12 @@ final class ArticleManager {
                                 return
                             }
                             
-                            let imageUrl: URL? = (article.imageSrcs.large2x ?? article.imageSrcs.large).flatMap { URL(string: $0) }
+                            let imageUrl: URL = URL(string: article.imageSrcs.large!)!
                             
-                            articles.append(ArticleCellModel(title: article.title, description: article.description, link: link, imageLink: imageUrl))
+                            articles.append(ArticleCellModel(title: article.title, description: article.description, link: link, imageUrl: imageUrl))
                         }
                     }
-                    
+                    self.currentPage += 1;
                     completion(.success(articles))
                 } catch {
                     completion(.failure(error))
